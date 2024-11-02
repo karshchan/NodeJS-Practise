@@ -1,0 +1,11 @@
+<%- include('header.ejs') %>
+    <h1>/books root here</h1>
+    <h2>click to receive books information in json</h2>
+    <% books.forEach(book => { %>
+        <p><a href="./books/<%=book.id%>">http://127.0.0.1:3000/books/<%=book.id%></a></p>
+    <% }) %>
+
+    <h2>If id not exist</h2>
+    <p><a href="./books/999">http://127.0.0.1:3000/books/999</a></p>
+
+<%- include('footer.ejs') %>

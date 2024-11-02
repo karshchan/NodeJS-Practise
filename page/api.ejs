@@ -1,0 +1,33 @@
+<%- include('header.ejs') %>
+    <h1>API Practise</h1>
+    <p>Using Regres API as example</p>
+    <p><a href="https://reqres.in/api/users/1">https://reqres.in/api/users/1</a></p>
+    <hr>
+
+    <h3>Get user with id 1</h3>
+    id: <%=user.id%> <br>
+    email: <%=user.email%> <br>
+    first_name: <%=user.first_name%> <br>
+    last_name: <%=user.last_name%> <br>
+    <img src="<%=user.avatar%>" alt="">
+    <hr>
+
+    <h3>Post method</h3>
+    <form action="./api/post" method="post">
+        <input type="submit" value="Process">
+    </form>
+    <hr>
+
+    <h3>Delete method</h3>
+    <form action="./api/delete?_method=DELETE" method="post">
+        <input type="submit" value="Process">
+    </form>
+    <hr>
+
+    <h3>Patch method</h3>
+    <form action="./api/patch?_method=PATCH" method="post">
+        <input type="submit" value="Process">
+    </form>
+    <hr>
+ 
+<%- include('footer.ejs') %>

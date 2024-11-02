@@ -1,0 +1,51 @@
+<%- include('header.ejs') %>
+    <h1>首頁</h1>
+    <h2>Receive POST Request</h2>
+    <form action="/" method="POST">
+        Username <input type="text" id="username" name="username"><br/>
+        Password <input type="password" id="password" name="password"><br/>
+        <input type="submit" value="登入">
+    </form>
+    <% if (locals.username) { %>
+        <p>Received Username: <%=username%></p>
+    <% } else { %>
+        <p>Received Username: Null</p>
+    <% } %>
+
+    <% if (locals.password) { %>
+        <p>Received Password: <%=password%></p>
+    <% } else { %>
+        <p>Received Password: Null</p>
+    <% } %>
+    <hr>
+
+    <h2>Routing</h2>
+    <p><a href="/books">http://127.0.0.1:3000/books</a></p>
+    <p><a href="/about">http://127.0.0.1:3000/about</a></p>
+    <h3>API (get, post, delete, patch)</h3>
+    <p><a href="/api">http://127.0.0.1:3000/api</a></p>
+    <hr>
+
+
+    <h2>View Engine(ejs): dayjs / js time</h2>
+    JavaScript: <h2 id="time"></h2>
+    NodeJS: <h2><%=time%></h2>
+    <hr>
+
+    <h2>View Engine(ejs): Object</h2>
+    <h3>Course Name: <%=courseName%></h3>
+    <% if (blogs.length) { %>
+        <% blogs.forEach(article => { %>
+            <h3>標題: <%=article.title%></h3>
+            <p>Author: <%=article.author%></p>
+        <% }) %>
+    <% } %>
+<%- include('footer.ejs') %>
+
+<script>
+    const timeTag = document.getElementById('time')
+    setInterval(function(){
+        var dt = new Date()
+        timeTag.innerText = `${dt.getHours()}:${dt.getMinutes()}:${dt.getSeconds()}`
+    }, 500)
+</script>
