@@ -1,0 +1,62 @@
+Event Loop Explanation: Ep42 - Ep48
+https://www.youtube.com/playlist?list=PLC3y8-rFHvwh8shCMHFA5kWxD9PaPwxaY
+
+==========================================================================
+
+Priority: sync > async;
+
+Callback Priority(queue): Timer > I/O > Check > Close handler;
+
+When start, process Microtask Queue first, then back to other Callback
+
+nextTick and Promise queues are executed in between each queue and each callback in Timer and Check Queue.
+==========================================================================
+
+Timer Queue check Microtask Queue when finishing every timer callback.
+
+Timer Queue is in FIFO order.
+
+==========================================================================
+
+When running setTimeOut with 0ms delay and an I/O async method;
+the order of execution can necer be guaranteed.
+
+NodeJS seems to follow c++ rule. 0ms delay will replaced by 1ms 
+
+The order depends on when the event loop start.
+If start at 0.05ms, setTimeOut callback is not yet added to Timer Queue.
+So, it will process I/O Queue first.
+
+==========================================================================
+
+Check Queue > setImmediate(()=>{})
+Event loop have to poll if IO operation is completed and queue up the completed operation callback
+When first get in IO Queue, the queue is empty.
+Then event loop go to polling part to ask if readFile() completed;
+If yes, IO Queue queue up the readFile() callback.
+However, the process has pass the IO Queue. So it need to wait next loop.
+
+IO events are polled and callback are added to IO Queue only after the IO is completed.
+
+Microtask Queue is process after IO Queue and before Check Queue.
+
+Check Queue check Microtask Queue when finishing every setImmediate callback.
+
+==========================================================================
+==========================================================================
+
+==========================================================================
+Microtask Queue Callback Priority: nextTick > Promise;
+
+If Promise Callback create a new nextTick Callback;
+Finish all Promise Callback first, then back to nextTick Callback.
+
+Reason to use process.nextTick:
+    Handle error
+    Cleanup unneeded resources
+    Request again before event loop continues
+    Allow a callback run after call stack has unwound but before the event loop continues
+
+==========================================================================
+
+Call stack empty, no more sync function, then start Callback 
