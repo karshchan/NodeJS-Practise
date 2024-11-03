@@ -3,19 +3,38 @@ const dayjs = require('dayjs')
 const booksRouter = require('./router/books.js')
 const aboutRouter = require('./router/about.js')
 const apiRouter = require('./router/api.js')
+const path = require("path")
+const cors = require("cors")
 
 const app = express()
+
+// Cross-Origin Resource Sharing, allow access from other site
+// restrict access 
+const whiteList = ["https://www.mysite231asfd.com", "http://127.0.0.1:3000", "http://localhost:3000"];
+const corsOptions = {
+    origin: (origin, callback) => {
+        console.log(origin)
+        if(whiteList.indexOf(origin) !== -1 || !origin) {
+            callback(null, true)
+        } else {
+            callback(new Error("Not allowed by CORS"))
+        }
+    },
+    optionsSuccessStatus: 200
+}
+app.use(cors(corsOptions))
 
 // Middleware
 // next > 跳到下一個 Middelware
 app.use((req, res, next) => {
-    console.log(`新訪客: 來自${req.hostname} | 請求頁面: ${req.path}`)
+    // req.hostname
+    console.log(`新訪客: 來自${req.headers.origin} | 請求頁面: ${req.path}`)
     next()
 })
 
 // 解決 server 不能讀取靜態檔案, e.g. css
-app.use(express.static('public'))
-// 接收post
+app.use(express.static('./public'))
+// 接收form data
 app.use(express.urlencoded({extended: true}))
 
 // set view engine type
@@ -44,7 +63,9 @@ const indexReturn = () => {
 
 app.get('/', (req, res)=>{
     //res.send('<h1>Home</h1>')
-    //res.sendFile('./page/index.html', {root:__dirname})
+    //res.sendFile('./page/index.ejs', {root:__dirname})
+    // res.sendFile(path.join(__dirname, "page", "index.html")) // html only
+
     res.render('index', indexReturn())
 })
 
@@ -66,7 +87,7 @@ app.get('/aboutMe', (req, res)=>{
 })
 
 app.get('/aboutus', (req, res)=>{
-    res.redirect('/aboutMe')
+    res.status(301).redirect('/aboutMe')
 })
 
 // 把/books 導到books.js處理
