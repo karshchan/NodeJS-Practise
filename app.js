@@ -32,8 +32,11 @@ app.use((req, res, next) => {
     next()
 })
 
-// 解決 server 不能讀取靜態檔案, e.g. css
+// 解決 server 不能讀取靜態檔案, e.g. css, js
 app.use(express.static('./public'))
+// allow specified path e.g. /books routes, to get static file 
+app.use("/books", express.static(path.join(__dirname, "./public")))
+
 // 接收form data
 app.use(express.urlencoded({extended: true}))
 
